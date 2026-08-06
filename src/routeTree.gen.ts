@@ -20,6 +20,7 @@ import { Route as PatientMedicationsRouteImport } from './routes/patient.medicat
 import { Route as PatientPhotoRouteImport } from './routes/patient.photo'
 import { Route as PatientSymptomsRouteImport } from './routes/patient.symptoms'
 import { Route as PatientTriageRouteImport } from './routes/patient.triage'
+import { Route as PatientWellbeingRouteImport } from './routes/patient.wellbeing'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -76,6 +77,11 @@ const PatientTriageRoute = PatientTriageRouteImport.update({
   path: '/triage',
   getParentRoute: () => PatientRoute,
 } as any)
+const PatientWellbeingRoute = PatientWellbeingRouteImport.update({
+  id: '/wellbeing',
+  path: '/wellbeing',
+  getParentRoute: () => PatientRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/patient/photo': typeof PatientPhotoRoute
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
+  '/patient/wellbeing': typeof PatientWellbeingRoute
   '/patient/': typeof PatientIndexRoute
 }
 export interface FileRoutesByTo {
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/patient/photo': typeof PatientPhotoRoute
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
+  '/patient/wellbeing': typeof PatientWellbeingRoute
   '/patient': typeof PatientIndexRoute
 }
 export interface FileRoutesById {
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/patient/photo': typeof PatientPhotoRoute
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
+  '/patient/wellbeing': typeof PatientWellbeingRoute
   '/patient/': typeof PatientIndexRoute
 }
 export interface FileRouteTypes {
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/patient/photo'
     | '/patient/symptoms'
     | '/patient/triage'
+    | '/patient/wellbeing'
     | '/patient/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/patient/photo'
     | '/patient/symptoms'
     | '/patient/triage'
+    | '/patient/wellbeing'
     | '/patient'
   id:
     | '__root__'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/patient/photo'
     | '/patient/symptoms'
     | '/patient/triage'
+    | '/patient/wellbeing'
     | '/patient/'
   fileRoutesById: FileRoutesById
 }
@@ -243,6 +255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PatientTriageRouteImport
       parentRoute: typeof PatientRoute
     }
+    '/patient/wellbeing': {
+      id: '/patient/wellbeing'
+      path: '/wellbeing'
+      fullPath: '/patient/wellbeing'
+      preLoaderRoute: typeof PatientWellbeingRouteImport
+      parentRoute: typeof PatientRoute
+    }
   }
 }
 
@@ -253,6 +272,7 @@ interface PatientRouteChildren {
   PatientPhotoRoute: typeof PatientPhotoRoute
   PatientSymptomsRoute: typeof PatientSymptomsRoute
   PatientTriageRoute: typeof PatientTriageRoute
+  PatientWellbeingRoute: typeof PatientWellbeingRoute
   PatientIndexRoute: typeof PatientIndexRoute
 }
 
@@ -263,6 +283,7 @@ const PatientRouteChildren: PatientRouteChildren = {
   PatientPhotoRoute: PatientPhotoRoute,
   PatientSymptomsRoute: PatientSymptomsRoute,
   PatientTriageRoute: PatientTriageRoute,
+  PatientWellbeingRoute: PatientWellbeingRoute,
   PatientIndexRoute: PatientIndexRoute,
 }
 
