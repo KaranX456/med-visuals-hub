@@ -17,6 +17,7 @@ import { Route as PatientIndexRouteImport } from './routes/patient.index'
 import { Route as PatientHistoryRouteImport } from './routes/patient.history'
 import { Route as PatientLabsRouteImport } from './routes/patient.labs'
 import { Route as PatientMedicationsRouteImport } from './routes/patient.medications'
+import { Route as PatientPhotoRouteImport } from './routes/patient.photo'
 import { Route as PatientSymptomsRouteImport } from './routes/patient.symptoms'
 import { Route as PatientTriageRouteImport } from './routes/patient.triage'
 
@@ -60,6 +61,11 @@ const PatientMedicationsRoute = PatientMedicationsRouteImport.update({
   path: '/medications',
   getParentRoute: () => PatientRoute,
 } as any)
+const PatientPhotoRoute = PatientPhotoRouteImport.update({
+  id: '/photo',
+  path: '/photo',
+  getParentRoute: () => PatientRoute,
+} as any)
 const PatientSymptomsRoute = PatientSymptomsRouteImport.update({
   id: '/symptoms',
   path: '/symptoms',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/patient/history': typeof PatientHistoryRoute
   '/patient/labs': typeof PatientLabsRoute
   '/patient/medications': typeof PatientMedicationsRoute
+  '/patient/photo': typeof PatientPhotoRoute
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
   '/patient/': typeof PatientIndexRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/patient/history': typeof PatientHistoryRoute
   '/patient/labs': typeof PatientLabsRoute
   '/patient/medications': typeof PatientMedicationsRoute
+  '/patient/photo': typeof PatientPhotoRoute
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
   '/patient': typeof PatientIndexRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/patient/history': typeof PatientHistoryRoute
   '/patient/labs': typeof PatientLabsRoute
   '/patient/medications': typeof PatientMedicationsRoute
+  '/patient/photo': typeof PatientPhotoRoute
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
   '/patient/': typeof PatientIndexRoute
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/patient/history'
     | '/patient/labs'
     | '/patient/medications'
+    | '/patient/photo'
     | '/patient/symptoms'
     | '/patient/triage'
     | '/patient/'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/patient/history'
     | '/patient/labs'
     | '/patient/medications'
+    | '/patient/photo'
     | '/patient/symptoms'
     | '/patient/triage'
     | '/patient'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/patient/history'
     | '/patient/labs'
     | '/patient/medications'
+    | '/patient/photo'
     | '/patient/symptoms'
     | '/patient/triage'
     | '/patient/'
@@ -210,6 +222,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PatientMedicationsRouteImport
       parentRoute: typeof PatientRoute
     }
+    '/patient/photo': {
+      id: '/patient/photo'
+      path: '/photo'
+      fullPath: '/patient/photo'
+      preLoaderRoute: typeof PatientPhotoRouteImport
+      parentRoute: typeof PatientRoute
+    }
     '/patient/symptoms': {
       id: '/patient/symptoms'
       path: '/symptoms'
@@ -231,6 +250,7 @@ interface PatientRouteChildren {
   PatientHistoryRoute: typeof PatientHistoryRoute
   PatientLabsRoute: typeof PatientLabsRoute
   PatientMedicationsRoute: typeof PatientMedicationsRoute
+  PatientPhotoRoute: typeof PatientPhotoRoute
   PatientSymptomsRoute: typeof PatientSymptomsRoute
   PatientTriageRoute: typeof PatientTriageRoute
   PatientIndexRoute: typeof PatientIndexRoute
@@ -240,6 +260,7 @@ const PatientRouteChildren: PatientRouteChildren = {
   PatientHistoryRoute: PatientHistoryRoute,
   PatientLabsRoute: PatientLabsRoute,
   PatientMedicationsRoute: PatientMedicationsRoute,
+  PatientPhotoRoute: PatientPhotoRoute,
   PatientSymptomsRoute: PatientSymptomsRoute,
   PatientTriageRoute: PatientTriageRoute,
   PatientIndexRoute: PatientIndexRoute,
