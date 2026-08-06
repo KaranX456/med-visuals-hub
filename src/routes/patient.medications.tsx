@@ -56,7 +56,7 @@ function MedicationCompanion() {
                   </Label>
                   <Switch
                     id={`taken-${m.id}`}
-                    checked={taken[m.id]}
+                    checked={taken[m.id] ?? false}
                     onCheckedChange={(v) => {
                       setTaken((p) => ({ ...p, [m.id]: v }));
                       toast.success(v ? `${m.name} logged` : `${m.name} marked not taken`);
