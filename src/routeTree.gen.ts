@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as PatientRouteImport } from './routes/patient'
+import { Route as DoctorIndexRouteImport } from './routes/doctor.index'
 import { Route as PatientIndexRouteImport } from './routes/patient.index'
 import { Route as PatientCommunityRouteImport } from './routes/patient.community'
 import { Route as PatientEnvironmentRouteImport } from './routes/patient.environment'
@@ -44,6 +45,11 @@ const PatientRoute = PatientRouteImport.update({
   id: '/patient',
   path: '/patient',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DoctorIndexRoute = DoctorIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DoctorRoute,
 } as any)
 const PatientIndexRoute = PatientIndexRouteImport.update({
   id: '/',
@@ -104,7 +110,7 @@ const PatientWellbeingRoute = PatientWellbeingRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/doctor': typeof DoctorRoute
+  '/doctor': typeof DoctorRouteWithChildren
   '/patient': typeof PatientRouteWithChildren
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
@@ -116,12 +122,12 @@ export interface FileRoutesByFullPath {
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
   '/patient/wellbeing': typeof PatientWellbeingRoute
+  '/doctor/': typeof DoctorIndexRoute
   '/patient/': typeof PatientIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/doctor': typeof DoctorRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
   '/patient/handoff': typeof PatientHandoffRoute
@@ -132,13 +138,14 @@ export interface FileRoutesByTo {
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
   '/patient/wellbeing': typeof PatientWellbeingRoute
+  '/doctor': typeof DoctorIndexRoute
   '/patient': typeof PatientIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/doctor': typeof DoctorRoute
+  '/doctor': typeof DoctorRouteWithChildren
   '/patient': typeof PatientRouteWithChildren
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
@@ -150,6 +157,7 @@ export interface FileRoutesById {
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
   '/patient/wellbeing': typeof PatientWellbeingRoute
+  '/doctor/': typeof DoctorIndexRoute
   '/patient/': typeof PatientIndexRoute
 }
 export interface FileRouteTypes {
@@ -169,12 +177,12 @@ export interface FileRouteTypes {
     | '/patient/symptoms'
     | '/patient/triage'
     | '/patient/wellbeing'
+    | '/doctor/'
     | '/patient/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
-    | '/doctor'
     | '/patient/community'
     | '/patient/environment'
     | '/patient/handoff'
@@ -185,6 +193,7 @@ export interface FileRouteTypes {
     | '/patient/symptoms'
     | '/patient/triage'
     | '/patient/wellbeing'
+    | '/doctor'
     | '/patient'
   id:
     | '__root__'
@@ -202,13 +211,14 @@ export interface FileRouteTypes {
     | '/patient/symptoms'
     | '/patient/triage'
     | '/patient/wellbeing'
+    | '/doctor/'
     | '/patient/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
-  DoctorRoute: typeof DoctorRoute
+  DoctorRoute: typeof DoctorRouteWithChildren
   PatientRoute: typeof PatientRouteWithChildren
 }
 
@@ -241,6 +251,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/patient'
       preLoaderRoute: typeof PatientRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/doctor/': {
+      id: '/doctor/'
+      path: '/'
+      fullPath: '/doctor/'
+      preLoaderRoute: typeof DoctorIndexRouteImport
+      parentRoute: typeof DoctorRoute
     }
     '/patient/': {
       id: '/patient/'
@@ -322,6 +339,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DoctorRouteChildren {
+  DoctorIndexRoute: typeof DoctorIndexRoute
+}
+
+const DoctorRouteChildren: DoctorRouteChildren = {
+  DoctorIndexRoute: DoctorIndexRoute,
+}
+
+const DoctorRouteWithChildren =
+  DoctorRoute._addFileChildren(DoctorRouteChildren)
+
 interface PatientRouteChildren {
   PatientCommunityRoute: typeof PatientCommunityRoute
   PatientEnvironmentRoute: typeof PatientEnvironmentRoute
@@ -356,7 +384,7 @@ const PatientRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
-  DoctorRoute: DoctorRoute,
+  DoctorRoute: DoctorRouteWithChildren,
   PatientRoute: PatientRouteWithChildren,
 }
 export const routeTree = rootRouteImport
