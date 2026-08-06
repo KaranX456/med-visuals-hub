@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as PatientRouteImport } from './routes/patient'
 import { Route as DoctorIndexRouteImport } from './routes/doctor.index'
+import { Route as DoctorDifferentialRouteImport } from './routes/doctor.differential'
 import { Route as DoctorDossierRouteImport } from './routes/doctor.dossier'
 import { Route as PatientIndexRouteImport } from './routes/patient.index'
 import { Route as PatientCommunityRouteImport } from './routes/patient.community'
@@ -50,6 +51,11 @@ const PatientRoute = PatientRouteImport.update({
 const DoctorIndexRoute = DoctorIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorDifferentialRoute = DoctorDifferentialRouteImport.update({
+  id: '/differential',
+  path: '/differential',
   getParentRoute: () => DoctorRoute,
 } as any)
 const DoctorDossierRoute = DoctorDossierRouteImport.update({
@@ -118,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/doctor': typeof DoctorRouteWithChildren
   '/patient': typeof PatientRouteWithChildren
+  '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
@@ -135,6 +142,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/doctor': typeof DoctorRouteWithChildren
   '/patient': typeof PatientRouteWithChildren
+  '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
@@ -176,6 +185,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/doctor'
     | '/patient'
+    | '/doctor/differential'
     | '/doctor/dossier'
     | '/patient/community'
     | '/patient/environment'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/doctor/differential'
     | '/doctor/dossier'
     | '/patient/community'
     | '/patient/environment'
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/doctor'
     | '/patient'
+    | '/doctor/differential'
     | '/doctor/dossier'
     | '/patient/community'
     | '/patient/environment'
@@ -269,6 +281,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/doctor/'
       preLoaderRoute: typeof DoctorIndexRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/differential': {
+      id: '/doctor/differential'
+      path: '/differential'
+      fullPath: '/doctor/differential'
+      preLoaderRoute: typeof DoctorDifferentialRouteImport
       parentRoute: typeof DoctorRoute
     }
     '/doctor/dossier': {
@@ -359,11 +378,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface DoctorRouteChildren {
+  DoctorDifferentialRoute: typeof DoctorDifferentialRoute
   DoctorDossierRoute: typeof DoctorDossierRoute
   DoctorIndexRoute: typeof DoctorIndexRoute
 }
 
 const DoctorRouteChildren: DoctorRouteChildren = {
+  DoctorDifferentialRoute: DoctorDifferentialRoute,
   DoctorDossierRoute: DoctorDossierRoute,
   DoctorIndexRoute: DoctorIndexRoute,
 }
