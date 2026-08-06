@@ -16,6 +16,7 @@ import { Route as PatientRouteImport } from './routes/patient'
 import { Route as PatientIndexRouteImport } from './routes/patient.index'
 import { Route as PatientCommunityRouteImport } from './routes/patient.community'
 import { Route as PatientEnvironmentRouteImport } from './routes/patient.environment'
+import { Route as PatientHandoffRouteImport } from './routes/patient.handoff'
 import { Route as PatientHistoryRouteImport } from './routes/patient.history'
 import { Route as PatientLabsRouteImport } from './routes/patient.labs'
 import { Route as PatientMedicationsRouteImport } from './routes/patient.medications'
@@ -57,6 +58,11 @@ const PatientCommunityRoute = PatientCommunityRouteImport.update({
 const PatientEnvironmentRoute = PatientEnvironmentRouteImport.update({
   id: '/environment',
   path: '/environment',
+  getParentRoute: () => PatientRoute,
+} as any)
+const PatientHandoffRoute = PatientHandoffRouteImport.update({
+  id: '/handoff',
+  path: '/handoff',
   getParentRoute: () => PatientRoute,
 } as any)
 const PatientHistoryRoute = PatientHistoryRouteImport.update({
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/patient': typeof PatientRouteWithChildren
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
+  '/patient/handoff': typeof PatientHandoffRoute
   '/patient/history': typeof PatientHistoryRoute
   '/patient/labs': typeof PatientLabsRoute
   '/patient/medications': typeof PatientMedicationsRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/doctor': typeof DoctorRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
+  '/patient/handoff': typeof PatientHandoffRoute
   '/patient/history': typeof PatientHistoryRoute
   '/patient/labs': typeof PatientLabsRoute
   '/patient/medications': typeof PatientMedicationsRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/patient': typeof PatientRouteWithChildren
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
+  '/patient/handoff': typeof PatientHandoffRoute
   '/patient/history': typeof PatientHistoryRoute
   '/patient/labs': typeof PatientLabsRoute
   '/patient/medications': typeof PatientMedicationsRoute
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/patient'
     | '/patient/community'
     | '/patient/environment'
+    | '/patient/handoff'
     | '/patient/history'
     | '/patient/labs'
     | '/patient/medications'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/doctor'
     | '/patient/community'
     | '/patient/environment'
+    | '/patient/handoff'
     | '/patient/history'
     | '/patient/labs'
     | '/patient/medications'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/patient'
     | '/patient/community'
     | '/patient/environment'
+    | '/patient/handoff'
     | '/patient/history'
     | '/patient/labs'
     | '/patient/medications'
@@ -251,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PatientEnvironmentRouteImport
       parentRoute: typeof PatientRoute
     }
+    '/patient/handoff': {
+      id: '/patient/handoff'
+      path: '/handoff'
+      fullPath: '/patient/handoff'
+      preLoaderRoute: typeof PatientHandoffRouteImport
+      parentRoute: typeof PatientRoute
+    }
     '/patient/history': {
       id: '/patient/history'
       path: '/history'
@@ -306,6 +325,7 @@ declare module '@tanstack/react-router' {
 interface PatientRouteChildren {
   PatientCommunityRoute: typeof PatientCommunityRoute
   PatientEnvironmentRoute: typeof PatientEnvironmentRoute
+  PatientHandoffRoute: typeof PatientHandoffRoute
   PatientHistoryRoute: typeof PatientHistoryRoute
   PatientLabsRoute: typeof PatientLabsRoute
   PatientMedicationsRoute: typeof PatientMedicationsRoute
@@ -319,6 +339,7 @@ interface PatientRouteChildren {
 const PatientRouteChildren: PatientRouteChildren = {
   PatientCommunityRoute: PatientCommunityRoute,
   PatientEnvironmentRoute: PatientEnvironmentRoute,
+  PatientHandoffRoute: PatientHandoffRoute,
   PatientHistoryRoute: PatientHistoryRoute,
   PatientLabsRoute: PatientLabsRoute,
   PatientMedicationsRoute: PatientMedicationsRoute,
