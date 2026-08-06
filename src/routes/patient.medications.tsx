@@ -22,7 +22,7 @@ export const Route = createFileRoute("/patient/medications")({
       { property: "og:description", content: "Track doses and check new symptoms against structured pharmacovigilance data." },
     ],
   }),
-  component: MedicationCompanion;
+  component: MedicationCompanion,
 });
 
 function MedicationCompanion() {
