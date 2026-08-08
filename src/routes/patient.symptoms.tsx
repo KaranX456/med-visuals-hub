@@ -13,6 +13,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { communityThreads, prepQuestions, symptomEntries, symptomTrajectory } from "@/data/mock";
+import { useAuth } from "@/hooks/use-auth";
+import { addSymptom, useSymptoms } from "@/lib/clinical-data";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/patient/symptoms")({
   head: () => ({
@@ -29,6 +32,55 @@ export const Route = createFileRoute("/patient/symptoms")({
 function SymptomOrganizer() {
   const [severity, setSeverity] = useState([4]);
   const [name, setName] = useState("");
+  const [onset, setOnset] = useState("2026-08-06");
+  const [notes, setNotes] = useState("");
+  const [saving, setSaving] = useState(false);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const { data: liveSymptoms } = useSymptoms();
+
+  const entries = user
+    ? (liveSymptoms ?? []).map((s) => ({
+        id: s.id,
+        name: s.name,
+        onset: s.onset ?? "—",
+        severity: s.severity ?? 0,
+        frequency: s.frequency ?? "Not specified",
+        notes: s.notes ?? "",
+        tags: s.tags ?? [],
+      }))
+    : symptomEntries;
+
+  async function handleAdd() {
+    if (!user) {
+      toast.info("Sign in to save symptoms to your record", {
+        description: "Without an account this stays a local demo.",
+      });
+      return;
+    }
+    if (!name.trim()) {
+      toast.error("Give the symptom a name first");
+      return;
+    }
+    setSaving(true);
+    try {
+      await addSymptom({
+        patient_id: user.id,
+        name: name.trim(),
+        onset: onset || null,
+        severity: severity[0] ?? 0,
+        notes: notes.trim() || null,
+      });
+      await queryClient.invalidateQueries({ queryKey: ["symptoms_log"] });
+      setName("");
+      setNotes("");
+      toast.success("Symptom logged", { description: "Added to your timeline and pre-visit sheet." });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save that symptom");
+    } finally {
+      setSaving(false);
+    }
+  }
 
   const burden = symptomTrajectory.map((d) => ({
     date: d.date,
@@ -54,8 +106,15 @@ function SymptomOrganizer() {
 
         <TabsContent value="timeline" className="mt-6 space-y-6">
           <Section title="Structured timeline" description="Ordered by onset, with the severity you recorded.">
+            {entries.length === 0 ? (
+              <Card>
+                <CardContent className="p-6 text-sm text-muted-foreground">
+                  Nothing logged yet. Use “Log a symptom” to start your timeline.
+                </CardContent>
+              </Card>
+            ) : null}
             <ol className="relative space-y-4 border-l border-border pl-6">
-              {symptomEntries.map((s) => (
+              {entries.map((s) => (
                 <li key={s.id} className="relative">
                   <CircleDot className="absolute -left-[31px] top-1 size-4 text-primary" aria-hidden />
                   <Card>
@@ -123,7 +182,7 @@ function SymptomOrganizer() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="symptom-onset">When did it start?</Label>
-                <Input id="symptom-onset" type="date" defaultValue="2026-08-06" />
+                <Input id="symptom-onset" type="date" value={onset} onChange={(e) => setOnset(e.target.value)} />
               </div>
               <div className="space-y-3">
                 <Label htmlFor="symptom-severity">How severe, 0 to 10? Currently {severity[0]}</Label>
@@ -131,11 +190,15 @@ function SymptomOrganizer() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="symptom-notes">Anything else worth noting?</Label>
-                <Textarea id="symptom-notes" rows={4} placeholder="Time of day, what makes it better or worse…" />
+                <Textarea
+                  id="symptom-notes"
+                  rows={4}
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Time of day, what makes it better or worse…"
+                />
               </div>
-              <Button
-                onClick={() => toast.success("Symptom logged", { description: "Added to your timeline and pre-visit sheet." })}
-              >
+              <Button onClick={handleAdd} disabled={saving}>
                 <Plus className="size-4" aria-hidden /> Add to timeline
               </Button>
               <SafetyNote>
