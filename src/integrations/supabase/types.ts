@@ -14,16 +14,374 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      care_assignments: {
+        Row: {
+          active: boolean
+          clinician_id: string
+          created_at: string
+          id: string
+          patient_id: string
+        }
+        Insert: {
+          active?: boolean
+          clinician_id: string
+          created_at?: string
+          id?: string
+          patient_id: string
+        }
+        Update: {
+          active?: boolean
+          clinician_id?: string
+          created_at?: string
+          id?: string
+          patient_id?: string
+        }
+        Relationships: []
+      }
+      differential_diagnoses: {
+        Row: {
+          clinician_id: string | null
+          condition: string
+          confidence_tier: string | null
+          contradicting_evidence: string[]
+          created_at: string
+          id: string
+          patient_id: string
+          probability: number | null
+          status: string
+          suggested_tests: string[]
+          supporting_evidence: string[]
+        }
+        Insert: {
+          clinician_id?: string | null
+          condition: string
+          confidence_tier?: string | null
+          contradicting_evidence?: string[]
+          created_at?: string
+          id?: string
+          patient_id: string
+          probability?: number | null
+          status?: string
+          suggested_tests?: string[]
+          supporting_evidence?: string[]
+        }
+        Update: {
+          clinician_id?: string | null
+          condition?: string
+          confidence_tier?: string | null
+          contradicting_evidence?: string[]
+          created_at?: string
+          id?: string
+          patient_id?: string
+          probability?: number | null
+          status?: string
+          suggested_tests?: string[]
+          supporting_evidence?: string[]
+        }
+        Relationships: []
+      }
+      lab_results: {
+        Row: {
+          analyte: string
+          collected_on: string | null
+          created_at: string
+          id: string
+          panel: string
+          patient_id: string
+          reference_high: number | null
+          reference_low: number | null
+          source: string | null
+          status: string | null
+          unit: string | null
+          value: number | null
+        }
+        Insert: {
+          analyte: string
+          collected_on?: string | null
+          created_at?: string
+          id?: string
+          panel: string
+          patient_id: string
+          reference_high?: number | null
+          reference_low?: number | null
+          source?: string | null
+          status?: string | null
+          unit?: string | null
+          value?: number | null
+        }
+        Update: {
+          analyte?: string
+          collected_on?: string | null
+          created_at?: string
+          id?: string
+          panel?: string
+          patient_id?: string
+          reference_high?: number | null
+          reference_low?: number | null
+          source?: string | null
+          status?: string | null
+          unit?: string | null
+          value?: number | null
+        }
+        Relationships: []
+      }
+      medical_history: {
+        Row: {
+          created_at: string
+          detail: string | null
+          id: string
+          kind: string
+          label: string
+          occurred_on: string | null
+          patient_id: string
+          severity: string | null
+        }
+        Insert: {
+          created_at?: string
+          detail?: string | null
+          id?: string
+          kind: string
+          label: string
+          occurred_on?: string | null
+          patient_id: string
+          severity?: string | null
+        }
+        Update: {
+          created_at?: string
+          detail?: string | null
+          id?: string
+          kind?: string
+          label?: string
+          occurred_on?: string | null
+          patient_id?: string
+          severity?: string | null
+        }
+        Relationships: []
+      }
+      medications: {
+        Row: {
+          active: boolean
+          adherence: number | null
+          created_at: string
+          dose: string | null
+          id: string
+          name: string
+          patient_id: string
+          schedule: string | null
+          started: string | null
+          taken_today: boolean
+          timing_guidance: string | null
+        }
+        Insert: {
+          active?: boolean
+          adherence?: number | null
+          created_at?: string
+          dose?: string | null
+          id?: string
+          name: string
+          patient_id: string
+          schedule?: string | null
+          started?: string | null
+          taken_today?: boolean
+          timing_guidance?: string | null
+        }
+        Update: {
+          active?: boolean
+          adherence?: number | null
+          created_at?: string
+          dose?: string | null
+          id?: string
+          name?: string
+          patient_id?: string
+          schedule?: string | null
+          started?: string | null
+          taken_today?: boolean
+          timing_guidance?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          altitude: string | null
+          climate: string | null
+          created_at: string
+          date_of_birth: string | null
+          full_name: string
+          id: string
+          region: string | null
+          sex: string | null
+          updated_at: string
+        }
+        Insert: {
+          altitude?: string | null
+          climate?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          full_name?: string
+          id: string
+          region?: string | null
+          sex?: string | null
+          updated_at?: string
+        }
+        Update: {
+          altitude?: string | null
+          climate?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          full_name?: string
+          id?: string
+          region?: string | null
+          sex?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      soap_notes: {
+        Row: {
+          assessment: string | null
+          clinician_id: string | null
+          created_at: string
+          id: string
+          objective: string | null
+          patient_id: string
+          plan: string | null
+          signed: boolean
+          subjective: string | null
+          updated_at: string
+          visit_date: string
+        }
+        Insert: {
+          assessment?: string | null
+          clinician_id?: string | null
+          created_at?: string
+          id?: string
+          objective?: string | null
+          patient_id: string
+          plan?: string | null
+          signed?: boolean
+          subjective?: string | null
+          updated_at?: string
+          visit_date?: string
+        }
+        Update: {
+          assessment?: string | null
+          clinician_id?: string | null
+          created_at?: string
+          id?: string
+          objective?: string | null
+          patient_id?: string
+          plan?: string | null
+          signed?: boolean
+          subjective?: string | null
+          updated_at?: string
+          visit_date?: string
+        }
+        Relationships: []
+      }
+      symptoms_log: {
+        Row: {
+          created_at: string
+          frequency: string | null
+          id: string
+          name: string
+          notes: string | null
+          onset: string | null
+          patient_id: string
+          severity: number | null
+          tags: string[]
+        }
+        Insert: {
+          created_at?: string
+          frequency?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          onset?: string | null
+          patient_id: string
+          severity?: number | null
+          tags?: string[]
+        }
+        Update: {
+          created_at?: string
+          frequency?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          onset?: string | null
+          patient_id?: string
+          severity?: number | null
+          tags?: string[]
+        }
+        Relationships: []
+      }
+      triage_records: {
+        Row: {
+          created_at: string
+          guidance: string | null
+          id: string
+          patient_id: string
+          red_flags: string[]
+          summary: string | null
+          urgency: string
+        }
+        Insert: {
+          created_at?: string
+          guidance?: string | null
+          id?: string
+          patient_id: string
+          red_flags?: string[]
+          summary?: string | null
+          urgency: string
+        }
+        Update: {
+          created_at?: string
+          guidance?: string | null
+          id?: string
+          patient_id?: string
+          red_flags?: string[]
+          summary?: string | null
+          urgency?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      can_read_patient: { Args: { _patient_id: string }; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_care_team: { Args: { _patient_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "patient" | "clinician" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +508,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["patient", "clinician", "admin"],
+    },
   },
 } as const
