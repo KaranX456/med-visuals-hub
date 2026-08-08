@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Activity,
   Pill,
@@ -24,10 +24,13 @@ import {
   ListChecks,
   Menu,
   ArrowLeft,
+  LogOut,
+  UserRound,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 
 export type Role = "patient" | "doctor" | "admin";
@@ -128,6 +131,43 @@ function Brand({ role }: { role: Role }) {
   );
 }
 
+function AccountControl() {
+  const { user, roles, loading, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  if (loading) return null;
+
+  if (!user) {
+    return (
+      <Button asChild size="sm" variant="outline" className="min-h-9">
+        <Link to="/auth">
+          <UserRound className="size-4" aria-hidden /> Sign in
+        </Link>
+      </Button>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <span className="hidden max-w-40 truncate text-xs text-muted-foreground md:inline">
+        {user.email}
+        {roles.length ? ` · ${roles[0]}` : ""}
+      </span>
+      <Button
+        size="sm"
+        variant="outline"
+        className="min-h-9"
+        onClick={async () => {
+          await signOut();
+          void navigate({ to: "/auth", replace: true });
+        }}
+      >
+        <LogOut className="size-4" aria-hidden /> Sign out
+      </Button>
+    </div>
+  );
+}
+
 export function AppShell({ role, children }: { role: Role; children: ReactNode }) {
   const [open, setOpen] = useState(false);
 
@@ -209,7 +249,8 @@ export function AppShell({ role, children }: { role: Role; children: ReactNode }
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <span className="hidden text-xs text-muted-foreground sm:inline">Demo data · not for clinical use</span>
+            <span className="hidden text-xs text-muted-foreground xl:inline">Demo data · not for clinical use</span>
+            <AccountControl />
             <ThemeToggle />
           </div>
         </header>
