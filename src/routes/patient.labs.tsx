@@ -63,6 +63,22 @@ function Labs() {
         </div>
       </Section>
 
+      <Section
+        title="Lab documents"
+        description="Upload the PDF or photo of a printed report. Files are private to you and your active care team."
+      >
+        <Card>
+          <CardContent className="p-5">
+            <SecureUpload
+              bucket="lab-documents"
+              accept="image/*,application/pdf"
+              label="Upload lab document"
+              emptyHint="No lab documents uploaded yet."
+            />
+          </CardContent>
+        </Card>
+      </Section>
+
       <Section title="Your panels">
         <div className="space-y-4">
           {labResults.map((panel) => (
