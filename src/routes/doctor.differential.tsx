@@ -1,4 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { Loader2, RefreshCw } from "lucide-react";
 import { PageHeader, SafetyNote, Section, StageTag, TierBadge } from "@/components/kit";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { toast } from "sonner";
 import { communityInsightsForDoctor, differential, treatmentOptions } from "@/data/mock";
+import { runStage2Scoring } from "@/lib/clinical-engine.functions";
 
 export const Route = createFileRoute("/doctor/differential")({
   head: () => ({
@@ -21,17 +25,53 @@ export const Route = createFileRoute("/doctor/differential")({
 });
 
 function Differential() {
+  const score = useServerFn(runStage2Scoring);
+  const stage2 = useMutation({
+    mutationFn: () =>
+      score({
+        data: {
+          concepts: ["Night sweats", "Fatigue", "Dry cough", "Headache"],
+          region: "east-africa",
+          labs: [
+            { marker: "HbA1c", status: "high" as const },
+            { marker: "Ferritin", status: "low" as const },
+          ],
+          medications: ["Sertraline", "Metformin", "Cetirizine"],
+        },
+      }),
+    onSuccess: (r) => toast.success(`Scored ${r.candidates.length} candidates`),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const candidates = stage2.data?.candidates ?? differential;
+
   return (
     <>
       <PageHeader
         eyebrow="Doctor feature 2"
         title="Ranked differential panel"
         description="Ranked candidates with the evidence trail that produced them. You must expand “why” before confirming — the tool assembles options, it does not decide."
-        actions={<StageTag stage={2} />}
+        actions={
+          <div className="flex items-center gap-2">
+            <StageTag stage={2} />
+            <Button size="sm" variant="outline" disabled={stage2.isPending} onClick={() => stage2.mutate()}>
+              {stage2.isPending ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+              ) : (
+                <RefreshCw className="size-4" aria-hidden />
+              )}
+              Re-run scoring
+            </Button>
+          </div>
+        }
       />
 
+      {stage2.data ? (
+        <p className="text-sm text-muted-foreground">{stage2.data.note}</p>
+      ) : null}
+
       <Accordion type="single" collapsible className="space-y-3">
-        {differential.map((c, i) => (
+        {candidates.map((c, i) => (
           <AccordionItem key={c.id} value={c.id} className="rounded-xl border border-border px-4">
             <AccordionTrigger className="hover:no-underline">
               <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 pr-2 text-left">

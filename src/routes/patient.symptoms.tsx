@@ -209,6 +209,69 @@ function SymptomOrganizer() {
               <Button onClick={handleAdd} disabled={saving}>
                 <Plus className="size-4" aria-hidden /> Add to timeline
               </Button>
+              <div className="space-y-3 rounded-xl border border-hypothesis/30 bg-hypothesis/5 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="flex items-center gap-2 text-sm font-semibold">
+                    <Sparkles className="size-4 text-hypothesis" aria-hidden /> Stage 1 — hypothesis extraction
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={stage1.isPending}
+                    onClick={() => {
+                      const text = `${name} ${notes}`.trim();
+                      if (!text) {
+                        toast.error("Describe the symptom first");
+                        return;
+                      }
+                      stage1.mutate(text);
+                    }}
+                  >
+                    {stage1.isPending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+                    Extract concepts
+                  </Button>
+                </div>
+                {stage1.data ? (
+                  <div className="space-y-3 text-sm">
+                    <p className="text-muted-foreground">{stage1.data.narrative}</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {stage1.data.concepts.map((c) => (
+                        <Badge
+                          key={c.snomed}
+                          variant="outline"
+                          className={c.redFlag ? "border-critical/40 bg-critical/10 text-critical" : "border-hypothesis/40 bg-hypothesis/10 text-hypothesis"}
+                        >
+                          {c.concept} · SNOMED {c.snomed} · {Math.round(c.confidence * 100)}%
+                        </Badge>
+                      ))}
+                    </div>
+                    {stage1.data.negated.length ? (
+                      <p className="text-xs text-muted-foreground">
+                        Explicitly denied: {stage1.data.negated.join(", ")}
+                      </p>
+                    ) : null}
+                    {stage1.data.duration || stage1.data.severity ? (
+                      <p className="text-xs text-muted-foreground">
+                        {stage1.data.duration ? `Duration ${stage1.data.duration.label} (${stage1.data.duration.chronicity}). ` : ""}
+                        {stage1.data.severity ? `Severity cue: ${stage1.data.severity.label}.` : ""}
+                      </p>
+                    ) : null}
+                    <ul className="space-y-2">
+                      {stage1.data.hypotheses.map((h) => (
+                        <li key={h.label} className="rounded-lg border border-border bg-background p-3">
+                          <p className="text-sm font-medium">{h.label}</p>
+                          <p className="text-xs text-muted-foreground">{h.rationale}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Free text is mapped to coded clinical concepts, negation is stripped, and candidate hypotheses
+                    are raised for Stage 2 scoring. Nothing here is a diagnosis.
+                  </p>
+                )}
+              </div>
               <SafetyNote>
                 What you log is structured into vocabulary the system understands. It generates candidate
                 hypotheses for your doctor — it does not tell you what you have.
