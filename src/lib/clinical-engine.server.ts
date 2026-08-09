@@ -279,9 +279,9 @@ export function extractHypotheses(text: string): Stage1Result {
 
 export type Stage2Input = {
   concepts: string[];
-  region?: string;
-  labs?: { marker: string; status: "high" | "low" | "normal" }[];
-  medications?: string[];
+  region?: string | undefined;
+  labs?: { marker: string; status: "high" | "low" | "normal" }[] | undefined;
+  medications?: string[] | undefined;
 };
 
 export type ScoredCandidate = {
