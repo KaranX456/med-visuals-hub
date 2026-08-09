@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { CircleDot, Plus } from "lucide-react";
+import { CircleDot, Plus, Sparkles, Loader2 } from "lucide-react";
 import { PageHeader, SafetyNote, Section, StageTag } from "@/components/kit";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +16,9 @@ import { communityThreads, prepQuestions, symptomEntries, symptomTrajectory } fr
 import { useAuth } from "@/hooks/use-auth";
 import { addSymptom, useSymptoms } from "@/lib/clinical-data";
 import { useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { runStage1Extraction } from "@/lib/clinical-engine.functions";
 
 export const Route = createFileRoute("/patient/symptoms")({
   head: () => ({
@@ -38,6 +41,11 @@ function SymptomOrganizer() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { data: liveSymptoms } = useSymptoms();
+  const extract = useServerFn(runStage1Extraction);
+  const stage1 = useMutation({
+    mutationFn: (text: string) => extract({ data: { text } }),
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   const entries = user
     ? (liveSymptoms ?? []).map((s) => ({
