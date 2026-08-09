@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
+import { SecureUpload } from "@/components/secure-upload";
 import { hba1cTrend, labResults } from "@/data/mock";
 
 export const Route = createFileRoute("/patient/labs")({

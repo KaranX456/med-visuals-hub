@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Camera, Eye, Search } from "lucide-react";
+import { Camera, Eye, Lock, Search } from "lucide-react";
 import { PageHeader, SafetyNote, Section, StageTag } from "@/components/kit";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { SecureUpload } from "@/components/secure-upload";
 import { photoTriageCases } from "@/data/mock";
 
 export const Route = createFileRoute("/patient/photo")({
@@ -30,7 +29,7 @@ function PhotoTriage() {
       />
 
       <Card className="border-dashed">
-        <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
+        <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
           <span className="grid size-14 place-items-center rounded-2xl bg-muted text-primary">
             <Camera className="size-7" aria-hidden />
           </span>
@@ -40,7 +39,18 @@ function PhotoTriage() {
               Good light, plain background, and a coin or ruler for scale if you can.
             </p>
           </div>
-          <Button onClick={() => toast.info("Photo capture is mocked in this prototype")}>Capture photo</Button>
+          <div className="w-full max-w-md text-left">
+            <SecureUpload
+              bucket="patient-photos"
+              accept="image/*"
+              label="Upload photo"
+              emptyHint="No photos stored yet."
+            />
+          </div>
+          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Lock className="size-3.5" aria-hidden /> Private bucket, encrypted at rest, opened only through
+            short-lived signed links.
+          </p>
         </CardContent>
       </Card>
 
