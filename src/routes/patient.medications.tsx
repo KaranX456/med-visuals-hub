@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { Clock, Info } from "lucide-react";
+import { Clock, Info, Loader2 } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { PageHeader, SafetyNote, Section, StageTag, TierBadge } from "@/components/kit";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { toast } from "sonner";
 import { adherenceTrend, disclosureFindings, medications } from "@/data/mock";
+import { runDisclosureGate } from "@/lib/clinical-engine.functions";
 
 export const Route = createFileRoute("/patient/medications")({
   head: () => ({
@@ -29,6 +32,30 @@ function MedicationCompanion() {
   const [taken, setTaken] = useState<Record<string, boolean>>(
     Object.fromEntries(medications.map((m) => [m.id, m.takenToday])),
   );
+  const gate = useServerFn(runDisclosureGate);
+  const check = useMutation({
+    mutationFn: () =>
+      gate({
+        data: {
+          symptoms: ["Night sweats", "Fatigue", "Nausea", "Palpitations", "Dizziness"],
+          medications: medications.map((m) => m.name),
+        },
+      }),
+    onSuccess: (r) => toast.success(`Checked ${r.findings.length} symptoms against FAERS and DrugBank`),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const findings =
+    check.data?.findings.map((f) => ({
+      id: f.id,
+      symptom: f.symptom,
+      tier: f.tier ?? ("rare-contested" as const),
+      directLink: f.directLink,
+      benign: f.benign,
+      disclosed: f.disclosed,
+      plainLanguage: f.plainLanguage,
+      source: f.source,
+    })) ?? disclosureFindings;
 
   return (
     <>
@@ -104,7 +131,7 @@ function MedicationCompanion() {
         description="New symptoms cross-referenced against FAERS and DrugBank records for your active medications."
       >
         <Accordion type="single" collapsible className="space-y-3">
-          {disclosureFindings.map((f) => (
+          {findings.map((f) => (
             <AccordionItem key={f.id} value={f.id} className="rounded-xl border border-border px-4">
               <AccordionTrigger className="hover:no-underline">
                 <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 pr-2 text-left sm:flex sm:justify-between">
@@ -136,7 +163,8 @@ function MedicationCompanion() {
             </AccordionItem>
           ))}
         </Accordion>
-        <Button variant="outline" onClick={() => toast.info("Re-checked against the latest FAERS index")}>
+        <Button variant="outline" disabled={check.isPending} onClick={() => check.mutate()}>
+          {check.isPending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
           Re-run side-effect check
         </Button>
       </Section>
