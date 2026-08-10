@@ -18,6 +18,8 @@ import { Route as DoctorIndexRouteImport } from './routes/doctor.index'
 import { Route as DoctorDifferentialRouteImport } from './routes/doctor.differential'
 import { Route as DoctorDossierRouteImport } from './routes/doctor.dossier'
 import { Route as DoctorFeedbackRouteImport } from './routes/doctor.feedback'
+import { Route as DoctorFlagsRouteImport } from './routes/doctor.flags'
+import { Route as DoctorMonitoringRouteImport } from './routes/doctor.monitoring'
 import { Route as DoctorSoapRouteImport } from './routes/doctor.soap'
 import { Route as PatientIndexRouteImport } from './routes/patient.index'
 import { Route as PatientCommunityRouteImport } from './routes/patient.community'
@@ -74,6 +76,16 @@ const DoctorDossierRoute = DoctorDossierRouteImport.update({
 const DoctorFeedbackRoute = DoctorFeedbackRouteImport.update({
   id: '/feedback',
   path: '/feedback',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorFlagsRoute = DoctorFlagsRouteImport.update({
+  id: '/flags',
+  path: '/flags',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorMonitoringRoute = DoctorMonitoringRouteImport.update({
+  id: '/monitoring',
+  path: '/monitoring',
   getParentRoute: () => DoctorRoute,
 } as any)
 const DoctorSoapRoute = DoctorSoapRouteImport.update({
@@ -146,6 +158,8 @@ export interface FileRoutesByFullPath {
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
   '/doctor/feedback': typeof DoctorFeedbackRoute
+  '/doctor/flags': typeof DoctorFlagsRoute
+  '/doctor/monitoring': typeof DoctorMonitoringRoute
   '/doctor/soap': typeof DoctorSoapRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
@@ -167,6 +181,8 @@ export interface FileRoutesByTo {
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
   '/doctor/feedback': typeof DoctorFeedbackRoute
+  '/doctor/flags': typeof DoctorFlagsRoute
+  '/doctor/monitoring': typeof DoctorMonitoringRoute
   '/doctor/soap': typeof DoctorSoapRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
@@ -191,6 +207,8 @@ export interface FileRoutesById {
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
   '/doctor/feedback': typeof DoctorFeedbackRoute
+  '/doctor/flags': typeof DoctorFlagsRoute
+  '/doctor/monitoring': typeof DoctorMonitoringRoute
   '/doctor/soap': typeof DoctorSoapRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
@@ -216,6 +234,8 @@ export interface FileRouteTypes {
     | '/doctor/differential'
     | '/doctor/dossier'
     | '/doctor/feedback'
+    | '/doctor/flags'
+    | '/doctor/monitoring'
     | '/doctor/soap'
     | '/patient/community'
     | '/patient/environment'
@@ -237,6 +257,8 @@ export interface FileRouteTypes {
     | '/doctor/differential'
     | '/doctor/dossier'
     | '/doctor/feedback'
+    | '/doctor/flags'
+    | '/doctor/monitoring'
     | '/doctor/soap'
     | '/patient/community'
     | '/patient/environment'
@@ -260,6 +282,8 @@ export interface FileRouteTypes {
     | '/doctor/differential'
     | '/doctor/dossier'
     | '/doctor/feedback'
+    | '/doctor/flags'
+    | '/doctor/monitoring'
     | '/doctor/soap'
     | '/patient/community'
     | '/patient/environment'
@@ -346,6 +370,20 @@ declare module '@tanstack/react-router' {
       path: '/feedback'
       fullPath: '/doctor/feedback'
       preLoaderRoute: typeof DoctorFeedbackRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/flags': {
+      id: '/doctor/flags'
+      path: '/flags'
+      fullPath: '/doctor/flags'
+      preLoaderRoute: typeof DoctorFlagsRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/monitoring': {
+      id: '/doctor/monitoring'
+      path: '/monitoring'
+      fullPath: '/doctor/monitoring'
+      preLoaderRoute: typeof DoctorMonitoringRouteImport
       parentRoute: typeof DoctorRoute
     }
     '/doctor/soap': {
@@ -439,6 +477,8 @@ interface DoctorRouteChildren {
   DoctorDifferentialRoute: typeof DoctorDifferentialRoute
   DoctorDossierRoute: typeof DoctorDossierRoute
   DoctorFeedbackRoute: typeof DoctorFeedbackRoute
+  DoctorFlagsRoute: typeof DoctorFlagsRoute
+  DoctorMonitoringRoute: typeof DoctorMonitoringRoute
   DoctorSoapRoute: typeof DoctorSoapRoute
   DoctorIndexRoute: typeof DoctorIndexRoute
 }
@@ -447,6 +487,8 @@ const DoctorRouteChildren: DoctorRouteChildren = {
   DoctorDifferentialRoute: DoctorDifferentialRoute,
   DoctorDossierRoute: DoctorDossierRoute,
   DoctorFeedbackRoute: DoctorFeedbackRoute,
+  DoctorFlagsRoute: DoctorFlagsRoute,
+  DoctorMonitoringRoute: DoctorMonitoringRoute,
   DoctorSoapRoute: DoctorSoapRoute,
   DoctorIndexRoute: DoctorIndexRoute,
 }
