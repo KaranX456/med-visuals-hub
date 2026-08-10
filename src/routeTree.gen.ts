@@ -17,6 +17,8 @@ import { Route as PatientRouteImport } from './routes/patient'
 import { Route as DoctorIndexRouteImport } from './routes/doctor.index'
 import { Route as DoctorDifferentialRouteImport } from './routes/doctor.differential'
 import { Route as DoctorDossierRouteImport } from './routes/doctor.dossier'
+import { Route as DoctorFeedbackRouteImport } from './routes/doctor.feedback'
+import { Route as DoctorSoapRouteImport } from './routes/doctor.soap'
 import { Route as PatientIndexRouteImport } from './routes/patient.index'
 import { Route as PatientCommunityRouteImport } from './routes/patient.community'
 import { Route as PatientEnvironmentRouteImport } from './routes/patient.environment'
@@ -67,6 +69,16 @@ const DoctorDifferentialRoute = DoctorDifferentialRouteImport.update({
 const DoctorDossierRoute = DoctorDossierRouteImport.update({
   id: '/dossier',
   path: '/dossier',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorFeedbackRoute = DoctorFeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorSoapRoute = DoctorSoapRouteImport.update({
+  id: '/soap',
+  path: '/soap',
   getParentRoute: () => DoctorRoute,
 } as any)
 const PatientIndexRoute = PatientIndexRouteImport.update({
@@ -133,6 +145,8 @@ export interface FileRoutesByFullPath {
   '/patient': typeof PatientRouteWithChildren
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
+  '/doctor/feedback': typeof DoctorFeedbackRoute
+  '/doctor/soap': typeof DoctorSoapRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
   '/patient/handoff': typeof PatientHandoffRoute
@@ -152,6 +166,8 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
+  '/doctor/feedback': typeof DoctorFeedbackRoute
+  '/doctor/soap': typeof DoctorSoapRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
   '/patient/handoff': typeof PatientHandoffRoute
@@ -174,6 +190,8 @@ export interface FileRoutesById {
   '/patient': typeof PatientRouteWithChildren
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
+  '/doctor/feedback': typeof DoctorFeedbackRoute
+  '/doctor/soap': typeof DoctorSoapRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
   '/patient/handoff': typeof PatientHandoffRoute
@@ -197,6 +215,8 @@ export interface FileRouteTypes {
     | '/patient'
     | '/doctor/differential'
     | '/doctor/dossier'
+    | '/doctor/feedback'
+    | '/doctor/soap'
     | '/patient/community'
     | '/patient/environment'
     | '/patient/handoff'
@@ -216,6 +236,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/doctor/differential'
     | '/doctor/dossier'
+    | '/doctor/feedback'
+    | '/doctor/soap'
     | '/patient/community'
     | '/patient/environment'
     | '/patient/handoff'
@@ -237,6 +259,8 @@ export interface FileRouteTypes {
     | '/patient'
     | '/doctor/differential'
     | '/doctor/dossier'
+    | '/doctor/feedback'
+    | '/doctor/soap'
     | '/patient/community'
     | '/patient/environment'
     | '/patient/handoff'
@@ -315,6 +339,20 @@ declare module '@tanstack/react-router' {
       path: '/dossier'
       fullPath: '/doctor/dossier'
       preLoaderRoute: typeof DoctorDossierRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/feedback': {
+      id: '/doctor/feedback'
+      path: '/feedback'
+      fullPath: '/doctor/feedback'
+      preLoaderRoute: typeof DoctorFeedbackRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/soap': {
+      id: '/doctor/soap'
+      path: '/soap'
+      fullPath: '/doctor/soap'
+      preLoaderRoute: typeof DoctorSoapRouteImport
       parentRoute: typeof DoctorRoute
     }
     '/patient/': {
@@ -400,12 +438,16 @@ declare module '@tanstack/react-router' {
 interface DoctorRouteChildren {
   DoctorDifferentialRoute: typeof DoctorDifferentialRoute
   DoctorDossierRoute: typeof DoctorDossierRoute
+  DoctorFeedbackRoute: typeof DoctorFeedbackRoute
+  DoctorSoapRoute: typeof DoctorSoapRoute
   DoctorIndexRoute: typeof DoctorIndexRoute
 }
 
 const DoctorRouteChildren: DoctorRouteChildren = {
   DoctorDifferentialRoute: DoctorDifferentialRoute,
   DoctorDossierRoute: DoctorDossierRoute,
+  DoctorFeedbackRoute: DoctorFeedbackRoute,
+  DoctorSoapRoute: DoctorSoapRoute,
   DoctorIndexRoute: DoctorIndexRoute,
 }
 
