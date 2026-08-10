@@ -11,6 +11,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { toast } from "sonner";
 import { communityInsightsForDoctor, differential, treatmentOptions } from "@/data/mock";
 import { runStage2Scoring } from "@/lib/clinical-engine.functions";
+import { NoPatientNotice, PatientSwitcher, useSelectedPatient } from "@/lib/patient-context";
+import { useAuth } from "@/hooks/use-auth";
+import { addFeedback, useLabResults, useMedications, useSymptoms } from "@/lib/clinical-data";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/doctor/differential")({
   head: () => ({
@@ -26,17 +30,45 @@ export const Route = createFileRoute("/doctor/differential")({
 
 function Differential() {
   const score = useServerFn(runStage2Scoring);
+  const { user } = useAuth();
+  const { selected } = useSelectedPatient();
+  const queryClient = useQueryClient();
+  const { data: symptoms = [] } = useSymptoms(selected?.patientId);
+  const { data: labs = [] } = useLabResults(selected?.patientId);
+  const { data: meds = [] } = useMedications(selected?.patientId);
+  const confirm = useMutation({
+    mutationFn: async (v: { condition: string; rank: number }) => {
+      if (!selected || !user) throw new Error("Select a patient first");
+      await addFeedback({
+        patient_id: selected.patientId,
+        clinician_id: user.id,
+        suggested_condition: v.condition,
+        confirmed_condition: v.condition,
+        suggestion_rank: v.rank,
+        was_correct: true,
+        category: null,
+        notes: "Confirmed from the ranked differential panel.",
+      });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["model_feedback"] });
+      toast.success("Outcome recorded", { description: "Added to the live validation set." });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
   const stage2 = useMutation({
     mutationFn: () =>
       score({
         data: {
-          concepts: ["Night sweats", "Fatigue", "Dry cough", "Headache"],
-          region: "east-africa",
-          labs: [
-            { marker: "HbA1c", status: "high" as const },
-            { marker: "Ferritin", status: "low" as const },
-          ],
-          medications: ["Sertraline", "Metformin", "Cetirizine"],
+          concepts: symptoms.length
+            ? symptoms.map((s) => s.name).slice(0, 30)
+            : ["Night sweats", "Fatigue", "Dry cough", "Headache"],
+          region: selected?.region ?? "east-africa",
+          labs: labs
+            .filter((l) => l.status === "high" || l.status === "low" || l.status === "normal")
+            .slice(0, 30)
+            .map((l) => ({ marker: l.analyte, status: l.status as "high" | "low" | "normal" })),
+          medications: meds.length ? meds.map((m) => m.name).slice(0, 30) : ["Sertraline", "Metformin"],
         },
       }),
     onSuccess: (r) => toast.success(`Scored ${r.candidates.length} candidates`),
@@ -53,6 +85,7 @@ function Differential() {
         description="Ranked candidates with the evidence trail that produced them. You must expand “why” before confirming — the tool assembles options, it does not decide."
         actions={
           <div className="flex items-center gap-2">
+            <PatientSwitcher />
             <StageTag stage={2} />
             <Button size="sm" variant="outline" disabled={stage2.isPending} onClick={() => stage2.mutate()}>
               {stage2.isPending ? (
@@ -65,6 +98,8 @@ function Differential() {
           </div>
         }
       />
+
+      {!selected ? <NoPatientNotice /> : null}
 
       {stage2.data ? (
         <p className="text-sm text-muted-foreground">{stage2.data.note}</p>
@@ -107,7 +142,11 @@ function Differential() {
                   </div>
                 ))}
               </div>
-              <Button size="sm" onClick={() => toast.success(`${c.condition} confirmed`, { description: "Recorded in the validation set." })}>
+              <Button
+                size="sm"
+                disabled={confirm.isPending || !selected}
+                onClick={() => confirm.mutate({ condition: c.condition, rank: i + 1 })}
+              >
                 Confirm this diagnosis
               </Button>
             </AccordionContent>

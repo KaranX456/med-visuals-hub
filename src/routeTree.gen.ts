@@ -16,6 +16,9 @@ import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as PatientRouteImport } from './routes/patient'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAccuracyRouteImport } from './routes/admin.accuracy'
+import { Route as AdminPipelineRouteImport } from './routes/admin.pipeline'
+import { Route as AdminRegulatoryRouteImport } from './routes/admin.regulatory'
+import { Route as AdminRoadmapRouteImport } from './routes/admin.roadmap'
 import { Route as DoctorIndexRouteImport } from './routes/doctor.index'
 import { Route as DoctorDifferentialRouteImport } from './routes/doctor.differential'
 import { Route as DoctorDossierRouteImport } from './routes/doctor.dossier'
@@ -68,6 +71,21 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminAccuracyRoute = AdminAccuracyRouteImport.update({
   id: '/accuracy',
   path: '/accuracy',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPipelineRoute = AdminPipelineRouteImport.update({
+  id: '/pipeline',
+  path: '/pipeline',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRegulatoryRoute = AdminRegulatoryRouteImport.update({
+  id: '/regulatory',
+  path: '/regulatory',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRoadmapRoute = AdminRoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
   getParentRoute: () => AdminRoute,
 } as any)
 const DoctorIndexRoute = DoctorIndexRouteImport.update({
@@ -168,6 +186,9 @@ export interface FileRoutesByFullPath {
   '/doctor': typeof DoctorRouteWithChildren
   '/patient': typeof PatientRouteWithChildren
   '/admin/accuracy': typeof AdminAccuracyRoute
+  '/admin/pipeline': typeof AdminPipelineRoute
+  '/admin/regulatory': typeof AdminRegulatoryRoute
+  '/admin/roadmap': typeof AdminRoadmapRoute
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
   '/doctor/feedback': typeof DoctorFeedbackRoute
@@ -192,6 +213,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/admin/accuracy': typeof AdminAccuracyRoute
+  '/admin/pipeline': typeof AdminPipelineRoute
+  '/admin/regulatory': typeof AdminRegulatoryRoute
+  '/admin/roadmap': typeof AdminRoadmapRoute
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
   '/doctor/feedback': typeof DoctorFeedbackRoute
@@ -220,6 +244,9 @@ export interface FileRoutesById {
   '/doctor': typeof DoctorRouteWithChildren
   '/patient': typeof PatientRouteWithChildren
   '/admin/accuracy': typeof AdminAccuracyRoute
+  '/admin/pipeline': typeof AdminPipelineRoute
+  '/admin/regulatory': typeof AdminRegulatoryRoute
+  '/admin/roadmap': typeof AdminRoadmapRoute
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
   '/doctor/feedback': typeof DoctorFeedbackRoute
@@ -249,6 +276,9 @@ export interface FileRouteTypes {
     | '/doctor'
     | '/patient'
     | '/admin/accuracy'
+    | '/admin/pipeline'
+    | '/admin/regulatory'
+    | '/admin/roadmap'
     | '/doctor/differential'
     | '/doctor/dossier'
     | '/doctor/feedback'
@@ -273,6 +303,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/admin/accuracy'
+    | '/admin/pipeline'
+    | '/admin/regulatory'
+    | '/admin/roadmap'
     | '/doctor/differential'
     | '/doctor/dossier'
     | '/doctor/feedback'
@@ -300,6 +333,9 @@ export interface FileRouteTypes {
     | '/doctor'
     | '/patient'
     | '/admin/accuracy'
+    | '/admin/pipeline'
+    | '/admin/regulatory'
+    | '/admin/roadmap'
     | '/doctor/differential'
     | '/doctor/dossier'
     | '/doctor/feedback'
@@ -378,6 +414,27 @@ declare module '@tanstack/react-router' {
       path: '/accuracy'
       fullPath: '/admin/accuracy'
       preLoaderRoute: typeof AdminAccuracyRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pipeline': {
+      id: '/admin/pipeline'
+      path: '/pipeline'
+      fullPath: '/admin/pipeline'
+      preLoaderRoute: typeof AdminPipelineRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/regulatory': {
+      id: '/admin/regulatory'
+      path: '/regulatory'
+      fullPath: '/admin/regulatory'
+      preLoaderRoute: typeof AdminRegulatoryRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/roadmap': {
+      id: '/admin/roadmap'
+      path: '/roadmap'
+      fullPath: '/admin/roadmap'
+      preLoaderRoute: typeof AdminRoadmapRouteImport
       parentRoute: typeof AdminRoute
     }
     '/doctor/': {
@@ -511,11 +568,17 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAccuracyRoute: typeof AdminAccuracyRoute
+  AdminPipelineRoute: typeof AdminPipelineRoute
+  AdminRegulatoryRoute: typeof AdminRegulatoryRoute
+  AdminRoadmapRoute: typeof AdminRoadmapRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAccuracyRoute: AdminAccuracyRoute,
+  AdminPipelineRoute: AdminPipelineRoute,
+  AdminRegulatoryRoute: AdminRegulatoryRoute,
+  AdminRoadmapRoute: AdminRoadmapRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
