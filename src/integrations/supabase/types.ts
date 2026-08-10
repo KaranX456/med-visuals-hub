@@ -200,6 +200,59 @@ export type Database = {
         }
         Relationships: []
       }
+      model_feedback: {
+        Row: {
+          category: string | null
+          clinician_id: string | null
+          confirmed_condition: string | null
+          created_at: string
+          differential_id: string | null
+          id: string
+          notes: string | null
+          patient_id: string
+          suggested_condition: string
+          suggestion_rank: number | null
+          updated_at: string
+          was_correct: boolean | null
+        }
+        Insert: {
+          category?: string | null
+          clinician_id?: string | null
+          confirmed_condition?: string | null
+          created_at?: string
+          differential_id?: string | null
+          id?: string
+          notes?: string | null
+          patient_id: string
+          suggested_condition: string
+          suggestion_rank?: number | null
+          updated_at?: string
+          was_correct?: boolean | null
+        }
+        Update: {
+          category?: string | null
+          clinician_id?: string | null
+          confirmed_condition?: string | null
+          created_at?: string
+          differential_id?: string | null
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          suggested_condition?: string
+          suggestion_rank?: number | null
+          updated_at?: string
+          was_correct?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "model_feedback_differential_id_fkey"
+            columns: ["differential_id"]
+            isOneToOne: false
+            referencedRelation: "differential_diagnoses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           altitude: string | null

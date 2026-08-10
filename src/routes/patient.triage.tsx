@@ -9,6 +9,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import type { Urgency } from "@/data/mock";
 import { triageAssessments } from "@/data/mock";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/use-auth";
+import { addTriageRecord, useTriageRecords } from "@/lib/clinical-data";
 
 export const Route = createFileRoute("/patient/triage")({
   head: () => ({
@@ -61,14 +64,52 @@ function routeFor(score: number): Urgency {
 function Triage() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [result, setResult] = useState<Urgency | null>(null);
+  const { user } = useAuth();
+  const { data: liveTriage } = useTriageRecords();
 
-  const submit = () => {
+  const guidanceFor = (u: Urgency) =>
+    u === "emergency"
+      ? "Call emergency services now. Do not drive yourself."
+      : u === "same-day"
+        ? "Seek same-day care at a clinic today."
+        : u === "scheduled"
+          ? "Book a scheduled visit within the next 7 days."
+          : "Keep monitoring and logging. Raise it at your next appointment.";
+
+  const submit = async () => {
     const score = questions.reduce((acc, q) => {
       const chosen = q.options.find((o) => o.value === answers[q.id]);
       return acc + (chosen?.weight ?? 0);
     }, 0);
-    setResult(routeFor(score));
+    const urgency = routeFor(score);
+    setResult(urgency);
+    if (!user) {
+      toast.info("Sign in to save this routing to your record");
+      return;
+    }
+    try {
+      await addTriageRecord({
+        patient_id: user.id,
+        urgency,
+        summary: `Urgency check — score ${score}`,
+        guidance: guidanceFor(urgency),
+        red_flags: answers["q1"] === "yes" ? ["Breathing / chest pain / bleeding reported"] : [],
+      });
+      toast.success("Guidance saved to your record");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not save that check");
+    }
   };
+
+  const records = user
+    ? (liveTriage ?? []).map((t) => ({
+        id: t.id,
+        symptom: t.summary ?? "Urgency check",
+        guidance: t.guidance ?? "",
+        rationale: t.red_flags.length ? t.red_flags.join(", ") : "No red flags reported.",
+        urgency: t.urgency as Urgency,
+      }))
+    : triageAssessments;
 
   return (
     <>
@@ -115,7 +156,7 @@ function Triage() {
                 </RadioGroup>
               </fieldset>
             ))}
-            <Button onClick={submit} disabled={Object.keys(answers).length < questions.length}>
+            <Button onClick={() => void submit()} disabled={Object.keys(answers).length < questions.length}>
               Get guidance
             </Button>
 
@@ -143,7 +184,7 @@ function Triage() {
 
       <Section title="Recent guidance" description="Every routing decision, with the reason behind it.">
         <div className="space-y-3">
-          {triageAssessments.map((t) => (
+          {records.map((t) => (
             <Card key={t.id}>
               <CardContent className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 p-4">
                 <div className="min-w-0">

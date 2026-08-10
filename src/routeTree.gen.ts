@@ -14,9 +14,18 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as PatientRouteImport } from './routes/patient'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAccuracyRouteImport } from './routes/admin.accuracy'
+import { Route as AdminPipelineRouteImport } from './routes/admin.pipeline'
+import { Route as AdminRegulatoryRouteImport } from './routes/admin.regulatory'
+import { Route as AdminRoadmapRouteImport } from './routes/admin.roadmap'
 import { Route as DoctorIndexRouteImport } from './routes/doctor.index'
 import { Route as DoctorDifferentialRouteImport } from './routes/doctor.differential'
 import { Route as DoctorDossierRouteImport } from './routes/doctor.dossier'
+import { Route as DoctorFeedbackRouteImport } from './routes/doctor.feedback'
+import { Route as DoctorFlagsRouteImport } from './routes/doctor.flags'
+import { Route as DoctorMonitoringRouteImport } from './routes/doctor.monitoring'
+import { Route as DoctorSoapRouteImport } from './routes/doctor.soap'
 import { Route as PatientIndexRouteImport } from './routes/patient.index'
 import { Route as PatientCommunityRouteImport } from './routes/patient.community'
 import { Route as PatientEnvironmentRouteImport } from './routes/patient.environment'
@@ -54,6 +63,31 @@ const PatientRoute = PatientRouteImport.update({
   path: '/patient',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAccuracyRoute = AdminAccuracyRouteImport.update({
+  id: '/accuracy',
+  path: '/accuracy',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPipelineRoute = AdminPipelineRouteImport.update({
+  id: '/pipeline',
+  path: '/pipeline',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRegulatoryRoute = AdminRegulatoryRouteImport.update({
+  id: '/regulatory',
+  path: '/regulatory',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRoadmapRoute = AdminRoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
+  getParentRoute: () => AdminRoute,
+} as any)
 const DoctorIndexRoute = DoctorIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -67,6 +101,26 @@ const DoctorDifferentialRoute = DoctorDifferentialRouteImport.update({
 const DoctorDossierRoute = DoctorDossierRouteImport.update({
   id: '/dossier',
   path: '/dossier',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorFeedbackRoute = DoctorFeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorFlagsRoute = DoctorFlagsRouteImport.update({
+  id: '/flags',
+  path: '/flags',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorMonitoringRoute = DoctorMonitoringRouteImport.update({
+  id: '/monitoring',
+  path: '/monitoring',
+  getParentRoute: () => DoctorRoute,
+} as any)
+const DoctorSoapRoute = DoctorSoapRouteImport.update({
+  id: '/soap',
+  path: '/soap',
   getParentRoute: () => DoctorRoute,
 } as any)
 const PatientIndexRoute = PatientIndexRouteImport.update({
@@ -127,12 +181,20 @@ const PatientWellbeingRoute = PatientWellbeingRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/doctor': typeof DoctorRouteWithChildren
   '/patient': typeof PatientRouteWithChildren
+  '/admin/accuracy': typeof AdminAccuracyRoute
+  '/admin/pipeline': typeof AdminPipelineRoute
+  '/admin/regulatory': typeof AdminRegulatoryRoute
+  '/admin/roadmap': typeof AdminRoadmapRoute
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
+  '/doctor/feedback': typeof DoctorFeedbackRoute
+  '/doctor/flags': typeof DoctorFlagsRoute
+  '/doctor/monitoring': typeof DoctorMonitoringRoute
+  '/doctor/soap': typeof DoctorSoapRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
   '/patient/handoff': typeof PatientHandoffRoute
@@ -143,15 +205,23 @@ export interface FileRoutesByFullPath {
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
   '/patient/wellbeing': typeof PatientWellbeingRoute
+  '/admin/': typeof AdminIndexRoute
   '/doctor/': typeof DoctorIndexRoute
   '/patient/': typeof PatientIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/admin/accuracy': typeof AdminAccuracyRoute
+  '/admin/pipeline': typeof AdminPipelineRoute
+  '/admin/regulatory': typeof AdminRegulatoryRoute
+  '/admin/roadmap': typeof AdminRoadmapRoute
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
+  '/doctor/feedback': typeof DoctorFeedbackRoute
+  '/doctor/flags': typeof DoctorFlagsRoute
+  '/doctor/monitoring': typeof DoctorMonitoringRoute
+  '/doctor/soap': typeof DoctorSoapRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
   '/patient/handoff': typeof PatientHandoffRoute
@@ -162,18 +232,27 @@ export interface FileRoutesByTo {
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
   '/patient/wellbeing': typeof PatientWellbeingRoute
+  '/admin': typeof AdminIndexRoute
   '/doctor': typeof DoctorIndexRoute
   '/patient': typeof PatientIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/doctor': typeof DoctorRouteWithChildren
   '/patient': typeof PatientRouteWithChildren
+  '/admin/accuracy': typeof AdminAccuracyRoute
+  '/admin/pipeline': typeof AdminPipelineRoute
+  '/admin/regulatory': typeof AdminRegulatoryRoute
+  '/admin/roadmap': typeof AdminRoadmapRoute
   '/doctor/differential': typeof DoctorDifferentialRoute
   '/doctor/dossier': typeof DoctorDossierRoute
+  '/doctor/feedback': typeof DoctorFeedbackRoute
+  '/doctor/flags': typeof DoctorFlagsRoute
+  '/doctor/monitoring': typeof DoctorMonitoringRoute
+  '/doctor/soap': typeof DoctorSoapRoute
   '/patient/community': typeof PatientCommunityRoute
   '/patient/environment': typeof PatientEnvironmentRoute
   '/patient/handoff': typeof PatientHandoffRoute
@@ -184,6 +263,7 @@ export interface FileRoutesById {
   '/patient/symptoms': typeof PatientSymptomsRoute
   '/patient/triage': typeof PatientTriageRoute
   '/patient/wellbeing': typeof PatientWellbeingRoute
+  '/admin/': typeof AdminIndexRoute
   '/doctor/': typeof DoctorIndexRoute
   '/patient/': typeof PatientIndexRoute
 }
@@ -195,8 +275,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/doctor'
     | '/patient'
+    | '/admin/accuracy'
+    | '/admin/pipeline'
+    | '/admin/regulatory'
+    | '/admin/roadmap'
     | '/doctor/differential'
     | '/doctor/dossier'
+    | '/doctor/feedback'
+    | '/doctor/flags'
+    | '/doctor/monitoring'
+    | '/doctor/soap'
     | '/patient/community'
     | '/patient/environment'
     | '/patient/handoff'
@@ -207,15 +295,23 @@ export interface FileRouteTypes {
     | '/patient/symptoms'
     | '/patient/triage'
     | '/patient/wellbeing'
+    | '/admin/'
     | '/doctor/'
     | '/patient/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin'
     | '/auth'
+    | '/admin/accuracy'
+    | '/admin/pipeline'
+    | '/admin/regulatory'
+    | '/admin/roadmap'
     | '/doctor/differential'
     | '/doctor/dossier'
+    | '/doctor/feedback'
+    | '/doctor/flags'
+    | '/doctor/monitoring'
+    | '/doctor/soap'
     | '/patient/community'
     | '/patient/environment'
     | '/patient/handoff'
@@ -226,6 +322,7 @@ export interface FileRouteTypes {
     | '/patient/symptoms'
     | '/patient/triage'
     | '/patient/wellbeing'
+    | '/admin'
     | '/doctor'
     | '/patient'
   id:
@@ -235,8 +332,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/doctor'
     | '/patient'
+    | '/admin/accuracy'
+    | '/admin/pipeline'
+    | '/admin/regulatory'
+    | '/admin/roadmap'
     | '/doctor/differential'
     | '/doctor/dossier'
+    | '/doctor/feedback'
+    | '/doctor/flags'
+    | '/doctor/monitoring'
+    | '/doctor/soap'
     | '/patient/community'
     | '/patient/environment'
     | '/patient/handoff'
@@ -247,13 +352,14 @@ export interface FileRouteTypes {
     | '/patient/symptoms'
     | '/patient/triage'
     | '/patient/wellbeing'
+    | '/admin/'
     | '/doctor/'
     | '/patient/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   DoctorRoute: typeof DoctorRouteWithChildren
   PatientRoute: typeof PatientRouteWithChildren
@@ -296,6 +402,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PatientRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/accuracy': {
+      id: '/admin/accuracy'
+      path: '/accuracy'
+      fullPath: '/admin/accuracy'
+      preLoaderRoute: typeof AdminAccuracyRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pipeline': {
+      id: '/admin/pipeline'
+      path: '/pipeline'
+      fullPath: '/admin/pipeline'
+      preLoaderRoute: typeof AdminPipelineRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/regulatory': {
+      id: '/admin/regulatory'
+      path: '/regulatory'
+      fullPath: '/admin/regulatory'
+      preLoaderRoute: typeof AdminRegulatoryRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/roadmap': {
+      id: '/admin/roadmap'
+      path: '/roadmap'
+      fullPath: '/admin/roadmap'
+      preLoaderRoute: typeof AdminRoadmapRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/doctor/': {
       id: '/doctor/'
       path: '/'
@@ -315,6 +456,34 @@ declare module '@tanstack/react-router' {
       path: '/dossier'
       fullPath: '/doctor/dossier'
       preLoaderRoute: typeof DoctorDossierRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/feedback': {
+      id: '/doctor/feedback'
+      path: '/feedback'
+      fullPath: '/doctor/feedback'
+      preLoaderRoute: typeof DoctorFeedbackRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/flags': {
+      id: '/doctor/flags'
+      path: '/flags'
+      fullPath: '/doctor/flags'
+      preLoaderRoute: typeof DoctorFlagsRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/monitoring': {
+      id: '/doctor/monitoring'
+      path: '/monitoring'
+      fullPath: '/doctor/monitoring'
+      preLoaderRoute: typeof DoctorMonitoringRouteImport
+      parentRoute: typeof DoctorRoute
+    }
+    '/doctor/soap': {
+      id: '/doctor/soap'
+      path: '/soap'
+      fullPath: '/doctor/soap'
+      preLoaderRoute: typeof DoctorSoapRouteImport
       parentRoute: typeof DoctorRoute
     }
     '/patient/': {
@@ -397,15 +566,41 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminAccuracyRoute: typeof AdminAccuracyRoute
+  AdminPipelineRoute: typeof AdminPipelineRoute
+  AdminRegulatoryRoute: typeof AdminRegulatoryRoute
+  AdminRoadmapRoute: typeof AdminRoadmapRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAccuracyRoute: AdminAccuracyRoute,
+  AdminPipelineRoute: AdminPipelineRoute,
+  AdminRegulatoryRoute: AdminRegulatoryRoute,
+  AdminRoadmapRoute: AdminRoadmapRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface DoctorRouteChildren {
   DoctorDifferentialRoute: typeof DoctorDifferentialRoute
   DoctorDossierRoute: typeof DoctorDossierRoute
+  DoctorFeedbackRoute: typeof DoctorFeedbackRoute
+  DoctorFlagsRoute: typeof DoctorFlagsRoute
+  DoctorMonitoringRoute: typeof DoctorMonitoringRoute
+  DoctorSoapRoute: typeof DoctorSoapRoute
   DoctorIndexRoute: typeof DoctorIndexRoute
 }
 
 const DoctorRouteChildren: DoctorRouteChildren = {
   DoctorDifferentialRoute: DoctorDifferentialRoute,
   DoctorDossierRoute: DoctorDossierRoute,
+  DoctorFeedbackRoute: DoctorFeedbackRoute,
+  DoctorFlagsRoute: DoctorFlagsRoute,
+  DoctorMonitoringRoute: DoctorMonitoringRoute,
+  DoctorSoapRoute: DoctorSoapRoute,
   DoctorIndexRoute: DoctorIndexRoute,
 }
 
@@ -445,7 +640,7 @@ const PatientRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   DoctorRoute: DoctorRouteWithChildren,
   PatientRoute: PatientRouteWithChildren,
