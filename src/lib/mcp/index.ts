@@ -1,5 +1,4 @@
 import { auth, defineMcp } from "@lovable.dev/mcp-js";
-import type { AnyToolDefinition } from "@lovable.dev/mcp-js";
 import getHealthSummary from "./tools/get-health-summary";
 import listLabResults from "./tools/list-lab-results";
 import listMedications from "./tools/list-medications";
@@ -26,5 +25,5 @@ export default defineMcp({
     listMedications,
     markMedicationTaken,
     listLabResults,
-  ] as unknown as AnyToolDefinition[],
+  ] as unknown as Parameters<typeof defineMcp>[0]["tools"],
 });
