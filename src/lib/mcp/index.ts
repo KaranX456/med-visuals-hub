@@ -1,4 +1,5 @@
 import { auth, defineMcp } from "@lovable.dev/mcp-js";
+import type { AnyToolDefinition } from "@lovable.dev/mcp-js";
 import getHealthSummary from "./tools/get-health-summary";
 import listLabResults from "./tools/list-lab-results";
 import listMedications from "./tools/list-medications";
@@ -18,5 +19,12 @@ export default defineMcp({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated",
   }),
-  tools: [getHealthSummary, listSymptoms, logSymptom, listMedications, markMedicationTaken, listLabResults],
+  tools: [
+    getHealthSummary,
+    listSymptoms,
+    logSymptom,
+    listMedications,
+    markMedicationTaken,
+    listLabResults,
+  ] as unknown as AnyToolDefinition[],
 });
