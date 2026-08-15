@@ -13,10 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DoctorRouteImport } from './routes/doctor'
-import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PatientRouteImport } from './routes/patient'
-import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
-import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAccuracyRouteImport } from './routes/admin.accuracy'
 import { Route as AdminPipelineRouteImport } from './routes/admin.pipeline'
@@ -40,8 +37,6 @@ import { Route as PatientPhotoRouteImport } from './routes/patient.photo'
 import { Route as PatientSymptomsRouteImport } from './routes/patient.symptoms'
 import { Route as PatientTriageRouteImport } from './routes/patient.triage'
 import { Route as PatientWellbeingRouteImport } from './routes/patient.wellbeing'
-import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
-import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -63,28 +58,11 @@ const DoctorRoute = DoctorRouteImport.update({
   path: '/doctor',
   getParentRoute: () => rootRouteImport,
 } as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PatientRoute = PatientRouteImport.update({
   id: '/patient',
   path: '/patient',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Char91DotmcpChar93ListToolsRoute =
-  Char91DotmcpChar93ListToolsRouteImport.update({
-    id: '/.mcp/list-tools',
-    path: '/.mcp/list-tools',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -200,27 +178,13 @@ const PatientWellbeingRoute = PatientWellbeingRouteImport.update({
   path: '/wellbeing',
   getParentRoute: () => PatientRoute,
 } as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Char91DotmcpChar93InvokeToolToolRoute =
-  Char91DotmcpChar93InvokeToolToolRouteImport.update({
-    id: '/.mcp/invoke-tool/$tool',
-    path: '/.mcp/invoke-tool/$tool',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/doctor': typeof DoctorRouteWithChildren
-  '/mcp': typeof McpRoute
   '/patient': typeof PatientRouteWithChildren
-  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
-  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/accuracy': typeof AdminAccuracyRoute
   '/admin/pipeline': typeof AdminPipelineRoute
   '/admin/regulatory': typeof AdminRegulatoryRoute
@@ -244,15 +208,10 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/doctor/': typeof DoctorIndexRoute
   '/patient/': typeof PatientIndexRoute
-  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
-  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/mcp': typeof McpRoute
-  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
-  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/accuracy': typeof AdminAccuracyRoute
   '/admin/pipeline': typeof AdminPipelineRoute
   '/admin/regulatory': typeof AdminRegulatoryRoute
@@ -276,8 +235,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/doctor': typeof DoctorIndexRoute
   '/patient': typeof PatientIndexRoute
-  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
-  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -285,10 +242,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRoute
   '/doctor': typeof DoctorRouteWithChildren
-  '/mcp': typeof McpRoute
   '/patient': typeof PatientRouteWithChildren
-  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
-  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/accuracy': typeof AdminAccuracyRoute
   '/admin/pipeline': typeof AdminPipelineRoute
   '/admin/regulatory': typeof AdminRegulatoryRoute
@@ -312,8 +266,6 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/doctor/': typeof DoctorIndexRoute
   '/patient/': typeof PatientIndexRoute
-  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
-  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -322,10 +274,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/doctor'
-    | '/mcp'
     | '/patient'
-    | '/.mcp/list-tools'
-    | '/.well-known/oauth-protected-resource'
     | '/admin/accuracy'
     | '/admin/pipeline'
     | '/admin/regulatory'
@@ -349,15 +298,10 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/doctor/'
     | '/patient/'
-    | '/.lovable/oauth/consent'
-    | '/.mcp/invoke-tool/$tool'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
-    | '/mcp'
-    | '/.mcp/list-tools'
-    | '/.well-known/oauth-protected-resource'
     | '/admin/accuracy'
     | '/admin/pipeline'
     | '/admin/regulatory'
@@ -381,18 +325,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/doctor'
     | '/patient'
-    | '/.lovable/oauth/consent'
-    | '/.mcp/invoke-tool/$tool'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/auth'
     | '/doctor'
-    | '/mcp'
     | '/patient'
-    | '/.mcp/list-tools'
-    | '/.well-known/oauth-protected-resource'
     | '/admin/accuracy'
     | '/admin/pipeline'
     | '/admin/regulatory'
@@ -416,8 +355,6 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/doctor/'
     | '/patient/'
-    | '/.lovable/oauth/consent'
-    | '/.mcp/invoke-tool/$tool'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -425,12 +362,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
   DoctorRoute: typeof DoctorRouteWithChildren
-  McpRoute: typeof McpRoute
   PatientRoute: typeof PatientRouteWithChildren
-  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
-  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
-  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -463,32 +395,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DoctorRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/patient': {
       id: '/patient'
       path: '/patient'
       fullPath: '/patient'
       preLoaderRoute: typeof PatientRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/.mcp/list-tools': {
-      id: '/.mcp/list-tools'
-      path: '/.mcp/list-tools'
-      fullPath: '/.mcp/list-tools'
-      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -652,20 +563,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PatientWellbeingRouteImport
       parentRoute: typeof PatientRoute
     }
-    '/.lovable/oauth/consent': {
-      id: '/.lovable/oauth/consent'
-      path: '/.lovable/oauth/consent'
-      fullPath: '/.lovable/oauth/consent'
-      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/.mcp/invoke-tool/$tool': {
-      id: '/.mcp/invoke-tool/$tool'
-      path: '/.mcp/invoke-tool/$tool'
-      fullPath: '/.mcp/invoke-tool/$tool'
-      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -746,13 +643,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
   DoctorRoute: DoctorRouteWithChildren,
-  McpRoute: McpRoute,
   PatientRoute: PatientRouteWithChildren,
-  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
-  Char91DotwellKnownChar93OauthProtectedResourceRoute:
-    Char91DotwellKnownChar93OauthProtectedResourceRoute,
-  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
-  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

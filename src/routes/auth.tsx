@@ -19,10 +19,6 @@ import {
 } from "@/components/ui/select";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { next?: string } => {
-    const raw = s['next'];
-    return typeof raw === "string" && raw.startsWith("/") && !raw.startsWith("//") ? { next: raw } : {};
-  },
   head: () => ({
     meta: [
       { title: "Sign in — AI Health Companion" },
@@ -37,7 +33,6 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { session } = useAuth();
   const navigate = useNavigate();
-  const next = Route.useSearch().next;
   const [busy, setBusy] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,13 +40,8 @@ function AuthPage() {
   const [role, setRole] = useState("patient");
 
   useEffect(() => {
-    if (!session) return;
-    if (next) {
-      window.location.replace(next);
-      return;
-    }
-    void navigate({ to: "/patient", replace: true });
-  }, [session, navigate, next]);
+    if (session) void navigate({ to: "/patient", replace: true });
+  }, [session, navigate]);
 
   async function signIn(e: React.FormEvent) {
     e.preventDefault();
@@ -68,7 +58,7 @@ function AuthPage() {
       email,
       password,
       options: {
-        emailRedirectTo: next ? window.location.origin + next : window.location.origin,
+        emailRedirectTo: window.location.origin,
         data: { full_name: fullName, role },
       },
     });
@@ -81,9 +71,7 @@ function AuthPage() {
   }
 
   async function google() {
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: next ? window.location.origin + next : window.location.origin,
-    });
+    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
     if (result.error) toast.error("Google sign-in failed. Please try again.");
   }
 
